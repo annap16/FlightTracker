@@ -43,9 +43,9 @@ namespace OOD_Project
                     string? input = Console.ReadLine();
                     if (input == "print")
                     {
+                        delegateClass.mut.WaitOne();
                         string jsonFileName = CreateFileName();
                         SerializationJSON serialization = new SerializationJSON();
-                        delegateClass.mut.WaitOne();
                         serialization.Serialize(delegateClass.objectsList, jsonFileName);
                         delegateClass.mut.ReleaseMutex();
                     }
