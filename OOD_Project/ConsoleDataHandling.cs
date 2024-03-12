@@ -6,14 +6,6 @@ using System.Threading.Tasks;
 
 namespace OOD_Project
 {
-    public class IsCompletedBoolWraper
-    {
-        public bool isCompleted { get; set; }
-        public IsCompletedBoolWraper()
-        {
-            isCompleted = false;
-        }
-    }
     public class ConsoleDataHandling
     {
         public ConsoleDataHandling() { }
@@ -57,6 +49,7 @@ namespace OOD_Project
                     {
                         Console.WriteLine("Wrong input!!! Write 'print' to download data " +
                             "or 'exit' to terminate the app");
+
                     }
                 }
             }
