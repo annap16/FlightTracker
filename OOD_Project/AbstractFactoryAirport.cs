@@ -26,7 +26,7 @@ namespace OOD_Project
     public class CrewFactory: PersonFactory
     {
         public CrewFactory(){ }
-        public override DataType Create(string [] data)
+        public override Crew Create(string [] data)
         {
             string type = data[0];
             UInt64 ID = UInt64.Parse(data[1]);
@@ -38,7 +38,7 @@ namespace OOD_Project
             string role = data[7];
             return new Crew(type, ID, name, age, phone, email, practice, role);
         }
-        public override DataType Create(byte[] data)
+        public override Crew Create(byte[] data)
         {
             MemoryStream memoryStream = new MemoryStream(data);
             BinaryReader binaryReader = new BinaryReader(memoryStream);
@@ -62,7 +62,7 @@ namespace OOD_Project
     public class PassengerFactory: PersonFactory
     {
         public PassengerFactory() { }
-        public override DataType Create(string[] data)
+        public override Passenger Create(string[] data)
         {
             string type = data[0];
             UInt64 ID = UInt64.Parse(data[1]);
@@ -75,7 +75,7 @@ namespace OOD_Project
             return new Passenger(type, ID, name, age, phone, email, classFlight, miles);
         }
 
-        public override DataType Create(byte[] data)
+        public override Passenger Create(byte[] data)
         {
             MemoryStream memoryStream = new MemoryStream(data);
             BinaryReader binaryReader = new BinaryReader(memoryStream);
@@ -97,7 +97,7 @@ namespace OOD_Project
     public class CargoFactory: DataTypeFactory
     {
         public CargoFactory() { }
-        public override DataType Create(string[] data)
+        public override Cargo Create(string[] data)
         {
             string type = data[0];
             UInt64 ID = UInt64.Parse(data[1]);
@@ -106,7 +106,7 @@ namespace OOD_Project
             string description = data[4];
             return new Cargo(type, ID, weight, code, description);
         }
-        public override DataType Create(byte[] data)
+        public override Cargo Create(byte[] data)
         {
             MemoryStream memoryStream = new MemoryStream(data);
             BinaryReader binaryReader = new BinaryReader(memoryStream);
@@ -130,7 +130,7 @@ namespace OOD_Project
     public class CargoPlaneFactory: PlaneFactory
     {
         public CargoPlaneFactory() { }
-        public override DataType Create(string[] data)
+        public override CargoPlane Create(string[] data)
         {
             string type = data[0];
             UInt64 ID = UInt64.Parse(data[1]);
@@ -140,7 +140,7 @@ namespace OOD_Project
             Single maxLoad = Single.Parse(data[5], CultureInfo.InvariantCulture);
             return new CargoPlane(type, ID, serial, country, model, maxLoad);
         }
-        public override DataType Create(byte[] data)
+        public override CargoPlane Create(byte[] data)
         {
             MemoryStream memoryStream = new MemoryStream(data);
             BinaryReader binaryReader = new BinaryReader(memoryStream);
@@ -159,7 +159,7 @@ namespace OOD_Project
     public class PassengerPlaneFactory: PlaneFactory
     {
         public PassengerPlaneFactory() { }
-        public override DataType Create(string[] data)
+        public override PassengerPlane Create(string[] data)
         {
             string type = data[0];
             UInt64 ID = UInt64.Parse(data[1]);
@@ -172,7 +172,7 @@ namespace OOD_Project
             return new PassengerPlane(type, ID, serial, country, model,
                 firstClassSize, businessClassSize, economyClassSize);
         }
-        public override DataType Create(byte[] data)
+        public override PassengerPlane Create(byte[] data)
         {
             MemoryStream memoryStream = new MemoryStream(data);
             BinaryReader binaryReader = new BinaryReader(memoryStream);
@@ -195,7 +195,7 @@ namespace OOD_Project
     public class AirportFactory: DataTypeFactory
     {
         public AirportFactory() { }
-        public override DataType Create(string[] data)
+        public override Airport Create(string[] data)
         {
             string type = data[0];
             UInt64 ID = UInt64.Parse(data[1]);
@@ -207,7 +207,7 @@ namespace OOD_Project
             string country = data[7];
             return new Airport(type, ID, name, code, longitude, latitude, AMSL, country);
         }
-        public override DataType Create(byte[] data)
+        public override Airport Create(byte[] data)
         {
             MemoryStream memoryStream = new MemoryStream(data);
             BinaryReader binaryReader = new BinaryReader(memoryStream);
@@ -228,7 +228,7 @@ namespace OOD_Project
     public class FlightFactory: DataTypeFactory
     {
         public FlightFactory() { }
-        public override DataType Create(string[] data)
+        public override Flight Create(string[] data)
         {
             string type = data[0];
             UInt64 ID = UInt64.Parse(data[1]);
@@ -261,7 +261,7 @@ namespace OOD_Project
             return new Flight(type, ID, originID, targetID, 
                 takeOffTime, landingTime, longitude, latitude, AMSL, planeID, crewID, loadID);
         }
-        public override DataType Create(byte[] data)
+        public override Flight Create(byte[] data)
         {
             MemoryStream memoryStream = new MemoryStream(data);
             BinaryReader binaryReader = new BinaryReader(memoryStream);

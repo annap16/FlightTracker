@@ -10,11 +10,11 @@ namespace OOD_Project
     public class Cargo : DataType
     {
         [JsonInclude]
-        protected Single weight { get; set; }
+        public Single weight { get; set; }
         [JsonInclude]
-        protected string code { get; set; }
+        public string code { get; set; }
         [JsonInclude]
-        protected string description { get; set; }
+        public string description { get; set; }
 
         public Cargo(string type, UInt64 ID, Single weight, string code, string description) : base(ID, type)
         {

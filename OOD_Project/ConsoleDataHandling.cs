@@ -6,16 +6,62 @@ using System.Threading.Tasks;
 
 namespace OOD_Project
 {
-    public class ConsoleDataHandling
+    public class IfFinishedTask
     {
-        public ConsoleDataHandling() { }
+        public bool finished;
+        public IfFinishedTask()
+        {
+            finished = false;
+        }
+    }
 
-        public string CreateFileName()
+    public static class ConsoleDataHandling
+    {
+        public static string CreateFileName()
         {
             DateTime now = DateTime.Now;
             return $"snapshot_{now.Hour:D2}_{now.Minute:D2}_{now.Second:D2}.json";
         }
-        public void WaitForInput(OnNewDataReadyClass delegateClass, bool delete)
+        
+        public static AllLists ChooseDataSource(string filePath, string FTRNameJson, 
+            NetworkSourceSimulator.NetworkSourceSimulator networkSource)
+        {
+            AllLists lists = new AllLists();
+
+            Console.WriteLine("Choose data source: FTR or TCP");
+            string? input = Console.ReadLine();
+            
+            if (input == "FTR")
+            {
+
+                FileReaderFTR fileReaderFTR = new FileReaderFTR();
+                List<DataType>? listFTR = fileReaderFTR.ReadFile(filePath, lists);
+                SerializationJSON serializationJSON = new SerializationJSON();
+                if (serializationJSON != null)
+                {
+                    serializationJSON.Serialize(listFTR, FTRNameJson);
+                }
+
+            }
+            else if (input == "TCP")
+            {
+                Console.WriteLine("Downloading data...");
+                OnNewDataReadyClass delegateClass = new OnNewDataReadyClass();
+                IfFinishedTask ifFinished = new IfFinishedTask();
+                networkSource.OnNewDataReady += delegateClass.OnNewDataReadyDelegate;
+                Task instanceCaller = new Task(() => { networkSource.Run(); ifFinished.finished = true; });
+                instanceCaller.Start();
+                WaitForInput(delegateClass, true, ifFinished);
+                lists = delegateClass.lists;
+            }
+            else
+            {
+                throw new Exception("Invalid option");
+            }
+
+            return lists;
+        }
+        public static void WaitForInput(OnNewDataReadyClass delegateClass, bool delete, IfFinishedTask ifFinished)
         {
             if(delete == true)
             {
@@ -25,10 +71,8 @@ namespace OOD_Project
                 {
                     File.Delete(filePath);
                 }
-
-
             }
-            while (true)
+            while (!ifFinished.finished)
             {
                 if (Console.KeyAvailable)
                 {
@@ -49,11 +93,11 @@ namespace OOD_Project
                     {
                         Console.WriteLine("Wrong input!!! Write 'print' to download data " +
                             "or 'exit' to terminate the app");
-
                     }
                 }
             }
-           
+            Console.WriteLine("Downloading data completed");
+            return;
         }
     }
 }

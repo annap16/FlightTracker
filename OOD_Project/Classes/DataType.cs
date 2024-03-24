@@ -10,9 +10,9 @@ namespace OOD_Project
     public abstract class DataType
     {
         [JsonInclude]
-        protected UInt64 ID { get; set; }
+        public UInt64 ID { get; set; }
         [JsonInclude]
-        protected string type { get; set; }
+        public string type { get; set; }
 
         public DataType(UInt64 ID, string type)
         {

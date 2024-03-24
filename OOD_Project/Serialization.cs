@@ -27,8 +27,7 @@ namespace OOD_Project
             StreamWriter sw2 = new StreamWriter(fileName);
             sw2.Write(s);
             sw2.Close();
-        }
-        
+        } 
     }
 
     

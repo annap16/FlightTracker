@@ -10,9 +10,9 @@ namespace OOD_Project
     public class Passenger : Person
     {
         [JsonInclude]
-        protected string classFlight { get; set; }
+        public string classFlight { get; set; }
         [JsonInclude]
-        protected UInt64 miles { get; set; }
+        public UInt64 miles { get; set; }
 
         public Passenger(string type, UInt64 iD, string name, UInt64 age, string phone, string email, string classFlight, UInt64 miles) : base(type, iD, name, age, phone, email)
         {

@@ -10,25 +10,29 @@ namespace OOD_Project
     public class Flight : DataType
     {
         [JsonInclude]
-        protected UInt64 originID { get; set; }
+        public UInt64 originID { get; set; }
         [JsonInclude]
-        protected UInt64 targetID { get; set; }
+        public UInt64 targetID { get; set; }
         [JsonInclude]
-        protected string takeOffTime { get; set; }
+        public string takeOffTime { get; set; }
         [JsonInclude]
-        protected string landingTime { get; set; }
+        public string landingTime { get; set; }
         [JsonInclude]
-        protected Single longitude { get; set; }
+        public Single longitude { get; set; }
         [JsonInclude]
-        protected Single latitude { get; set; }
+        public Single latitude { get; set; }
         [JsonInclude]
-        protected Single AMSL { get; set; }
+        public Single AMSL { get; set; }
         [JsonInclude]
-        protected UInt64 planeID { get; set; }
+        public UInt64 planeID { get; set; }
         [JsonInclude]
-        protected UInt64[] crewID { get; set; }
+        public UInt64[] crewID { get; set; }
         [JsonInclude]
-        protected UInt64[] loadID { get; set; }
+        public UInt64[] loadID { get; set; }
+
+        [JsonIgnore]
+        public double? prevLatitude { get; set; }
+         public double? prevLongitude { get; set; }
 
         public Flight(string type, UInt64 iD, UInt64 originID, UInt64 targetID, string takeOffTime, string landingTime, Single longitude, Single latitude, Single aMSL, UInt64 planeID, UInt64[] crewID, UInt64[] loadID) : base(iD, type)
         {
@@ -42,6 +46,8 @@ namespace OOD_Project
             this.planeID = planeID;
             this.crewID = crewID[..];
             this.loadID = loadID[..];
+            prevLatitude = null;
+            prevLongitude = null;
         }
 
         public Flight(string type, UInt64 iD, UInt64 originID, UInt64 targetID, string takeOffTime, string landingTime, UInt64 planeID, UInt64[] crewID, UInt64[] loadID) : base(iD, type)
@@ -53,9 +59,11 @@ namespace OOD_Project
             this.planeID = planeID;
             this.crewID = crewID[..];
             this.loadID = loadID[..];
-            this.latitude = Single.NaN;
-            this.longitude = Single.NaN;
-            this.AMSL = Single.NaN;
+            latitude = Single.NaN;
+            longitude = Single.NaN;
+            AMSL = Single.NaN;
+            prevLatitude = null;
+            prevLongitude = null;
         }
     }
 }

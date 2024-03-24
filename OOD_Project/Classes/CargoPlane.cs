@@ -10,7 +10,7 @@ namespace OOD_Project
     public class CargoPlane : Plane
     {
         [JsonInclude]
-        protected Single maxLoad { get; set; }
+        public Single maxLoad { get; set; }
 
         public CargoPlane(string type, UInt64 iD, string serial, string country, string model, Single maxLoad) : base(type, iD, serial, country, model)
         {

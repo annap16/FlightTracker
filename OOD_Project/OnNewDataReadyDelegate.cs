@@ -11,11 +11,13 @@ namespace OOD_Project
     public class OnNewDataReadyClass
     {
         public List<DataType> objectsList;
+        public AllLists lists;
         public Mutex mut;
         public OnNewDataReadyClass() 
         {
             objectsList = new List<DataType>();
             mut = new Mutex();
+            lists = new AllLists();
         }
         public void OnNewDataReadyDelegate(object sender, NetworkSourceSimulator.NewDataReadyArgs args)
         {
@@ -28,7 +30,7 @@ namespace OOD_Project
             NetworkSourceSimulator.Message message = mySender.GetMessageAt(index);
             byte [] tabBinaryMess = message.MessageBytes;
             FileReaderBinary fileReaderBinary = new FileReaderBinary();
-            objectsList.Add(fileReaderBinary.ReadData(tabBinaryMess)); 
+            objectsList.Add(fileReaderBinary.ReadData(tabBinaryMess, lists));       
         }
     }
 }

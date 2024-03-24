@@ -9,31 +9,30 @@ namespace OOD_Project
     public abstract class FileReader
     {
         
-        public abstract List<DataType>? ReadFile(string filePath);
-        public abstract DataType ReadData(byte[] data);
+        public abstract List<DataType>? ReadFile(string filePath, AllLists lists);
+        public abstract DataType ReadData(byte[] data, AllLists lists);
 
     }
     
     public class FileReaderFTR: FileReader
     {
 
-        protected Dictionary<string, DataTypeFactory> dictionary;
+        protected Dictionary<string, Func<string[], AllLists, DataType>>dictionary;
 
         public FileReaderFTR()
         {
-
-            dictionary = new Dictionary<string, DataTypeFactory>()
+            dictionary = new Dictionary<string, Func<string[], AllLists, DataType>>()
             {
-                { "C", new CrewFactory() },
-                { "P", new PassengerFactory() },
-                { "CA", new CargoFactory()},
-                { "CP", new CargoPlaneFactory() },
-                { "PP", new PassengerPlaneFactory() },
-                { "AI", new AirportFactory() },
-                { "FL", new FlightFactory() }
+                { "C", AllLists.AddCrew},
+                { "P",   AllLists.AddPassenger},
+                { "CA",  AllLists.AddCargo},
+                { "CP",  AllLists.AddCargoPlane },
+                { "PP", AllLists.AddPassengerPlane },
+                { "AI",  AllLists.AddAirport },
+                { "FL", AllLists.AddFlight}
             };
         }
-        public override List<DataType>? ReadFile(string filePath)
+        public override List<DataType>? ReadFile(string filePath, AllLists lists)
         {
             List<DataType> objectsList = new List<DataType>();
             try
@@ -43,7 +42,7 @@ namespace OOD_Project
                 while (!sr.EndOfStream)
                 {
                     line = sr.ReadLine();
-                    DataType? obj = InterpretLine(line);
+                    DataType? obj = InterpretLine(line, lists);
                     if(obj != null)
                     {
                         objectsList.Add(obj);
@@ -59,14 +58,14 @@ namespace OOD_Project
             return objectsList;
         }
 
-        public DataType? InterpretLine(string? line)
+        public DataType? InterpretLine(string? line, AllLists lists)
         {
             if (line == null) return null;
             string[] splitLine = line.Split(',');
-            return dictionary[splitLine[0]].Create(splitLine);
+            return dictionary[splitLine[0]](splitLine, lists);
         }
 
-        public override DataType ReadData(byte[] data)
+        public override DataType ReadData(byte[] data, AllLists lists)
         {
             throw new NotImplementedException();
         }
@@ -75,32 +74,32 @@ namespace OOD_Project
 
     public class FileReaderBinary : FileReader
     {
-        protected Dictionary<string, DataTypeFactory> dictionary;
+        protected Dictionary<string, Func<byte[], AllLists, DataType>> dictionary;
 
         public FileReaderBinary()
         {
 
-            dictionary = new Dictionary<string, DataTypeFactory>()
+            dictionary = new Dictionary<string, Func<byte[], AllLists, DataType>>()
             {
-                { "NCR", new CrewFactory() },
-                { "NPA", new PassengerFactory() },
-                { "NCA", new CargoFactory()},
-                { "NCP", new CargoPlaneFactory() },
-                { "NPP", new PassengerPlaneFactory() },
-                { "NAI", new AirportFactory() },
-                { "NFL", new FlightFactory() }
+                { "NCR", AllLists.AddCrew },
+                { "NPA", AllLists.AddPassenger },
+                { "NCA", AllLists.AddCargo},
+                { "NCP", AllLists.AddCargoPlane },
+                { "NPP", AllLists.AddPassengerPlane },
+                { "NAI", AllLists.AddAirport },
+                { "NFL", AllLists.AddFlight }
             };
         }
 
-        public override List<DataType>? ReadFile(string filePath)
+        public override List<DataType>? ReadFile(string filePath, AllLists lists)
         {
             throw new NotImplementedException();
         }
 
-        public override DataType ReadData(byte[] data)
+        public override DataType ReadData(byte[] data, AllLists lists)
         {
             string type = GetType(data);
-            return dictionary[type].Create(data);
+            return dictionary[type](data, lists);
         }
 
         public string GetType(byte[] data)
