@@ -23,13 +23,15 @@ namespace OOD_Project
             return $"snapshot_{now.Hour:D2}_{now.Minute:D2}_{now.Second:D2}.json";
         }
         
-        public static AllLists ChooseDataSource(string filePath, string FTRNameJson, 
-            NetworkSourceSimulator.NetworkSourceSimulator networkSource)
+        public static (AllLists, bool) ChooseDataSource(string filePath, string FTRNameJson, 
+            NetworkSourceSimulator.NetworkSourceSimulator networkSource, OnNewDataReadyClass delegateClass)
         {
             AllLists lists = new AllLists();
 
             Console.WriteLine("Choose data source: FTR or TCP");
             string? input = Console.ReadLine();
+
+            bool type;
             
             if (input == "FTR")
             {
@@ -41,25 +43,26 @@ namespace OOD_Project
                 {
                     serializationJSON.Serialize(listFTR, FTRNameJson);
                 }
+                type = true;
 
             }
             else if (input == "TCP")
             {
                 Console.WriteLine("Downloading data...");
-                OnNewDataReadyClass delegateClass = new OnNewDataReadyClass();
                 IfFinishedTask ifFinished = new IfFinishedTask();
                 networkSource.OnNewDataReady += delegateClass.OnNewDataReadyDelegate;
                 Task instanceCaller = new Task(() => { networkSource.Run(); ifFinished.finished = true; });
                 instanceCaller.Start();
                 WaitForInput(delegateClass, true, ifFinished);
                 lists = delegateClass.lists;
+                type = false;
             }
             else
             {
                 throw new Exception("Invalid option");
             }
 
-            return lists;
+            return (lists, type);
         }
         public static void WaitForInput(OnNewDataReadyClass delegateClass, bool delete, IfFinishedTask ifFinished)
         {

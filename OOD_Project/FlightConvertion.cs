@@ -29,6 +29,7 @@ namespace OOD_Project
                 {
                     throw new Exception("Airport not found");
                 }
+                
 
                 if ((timeDiffOrigin > 0 && timeDiffTarget>0) || (timeDiffFlight<0 && timeDiffOrigin>0))
                 {
@@ -60,8 +61,11 @@ namespace OOD_Project
                     flight.prevLatitude = pos.latitude;
                     flight.prevLongitude = pos.longitude;
                 }
+
             }
-        }
+            //int pom1 = 1;
+         }
+
 
         // Using methods described on: https://www.movable-type.co.uk/scripts/latlong.html
         public (double latitude, double longitude) CalculateWorldPosition(Airport originAirport, Airport targetAirport, double timeDiffAirport, double timeDiffNow)

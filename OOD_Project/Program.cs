@@ -20,15 +20,24 @@ namespace OOD_Project
             NetworkSourceSimulator.NetworkSourceSimulator networkSource =
                 new NetworkSourceSimulator.NetworkSourceSimulator(filePath, 10, 15);
 
-            AllLists lists = ConsoleDataHandling.ChooseDataSource(filePath, FTRNameJson, networkSource);
+            OnNewDataReadyClass delegateClass = new OnNewDataReadyClass();
+           ( AllLists lists, bool type )= ConsoleDataHandling.ChooseDataSource(filePath, FTRNameJson, networkSource, delegateClass);
            
             Task runApp = new Task(() => { Runner.Run(); });
             runApp.Start();
             
             Task refreshApp = new Task(() => {
-                Timer timerObject = new Timer(lists); 
-                Console.WriteLine("Press the Enter key to exit the application...\n");
-                Console.ReadLine();
+                Timer timerObject = new Timer(lists);
+                if (!type)
+                {
+                    IfFinishedTask ifFinished = new IfFinishedTask();
+                    ConsoleDataHandling.WaitForInput(delegateClass, false, ifFinished);
+                }
+                else
+                {
+                    Console.WriteLine("Press Enter to exit the app...");
+                    Console.ReadLine();
+                }
                 timerObject.timer.Stop();
                 timerObject.timer.Dispose();
             });
