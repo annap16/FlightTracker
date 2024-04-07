@@ -22,5 +22,7 @@ namespace OOD_Project
             this.country = country;
             this.model = model;
         }
+
+
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OOD_Project
 {
-    public class Airport : DataType
+    public class Airport : DataType, IReportable
     {
         [JsonInclude]
         public string name { get; set; }
@@ -30,6 +30,11 @@ namespace OOD_Project
             this.longitude = longitude;
             AMSL = aMSL;
             this.country = country;
+        }
+
+        public string Accept(Visitor visitor)
+        {
+            return visitor.Visit(this);
         }
     }
 }

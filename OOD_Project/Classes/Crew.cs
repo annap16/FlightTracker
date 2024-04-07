@@ -19,6 +19,7 @@ namespace OOD_Project
             this.practice = practice;
             this.role = role;
         }
+        
 
     }
 }

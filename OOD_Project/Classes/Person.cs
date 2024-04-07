@@ -25,5 +25,6 @@ namespace OOD_Project
             this.phone = phone;
             this.email = email;
         }
+       
     }
 }

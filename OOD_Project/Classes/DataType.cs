@@ -19,5 +19,7 @@ namespace OOD_Project
             this.ID = ID;
             this.type = type;
         }
+      
+
     }
 }

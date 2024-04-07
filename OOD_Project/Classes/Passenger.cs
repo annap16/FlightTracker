@@ -19,5 +19,7 @@ namespace OOD_Project
             this.classFlight = classFlight;
             this.miles = miles;
         }
+
+        
     }
 }

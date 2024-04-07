@@ -22,5 +22,6 @@ namespace OOD_Project
             this.code = code;
             this.description = description;
         }
+       
     }
 }

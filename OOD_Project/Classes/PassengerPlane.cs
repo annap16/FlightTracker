@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OOD_Project
 {
-    public class PassengerPlane : Plane
+    public class PassengerPlane : Plane, IReportable
     {
         [JsonInclude]
         public UInt16 firstClassSize { get; set; }
@@ -21,6 +21,10 @@ namespace OOD_Project
             this.firstClassSize = firstClassSize;
             this.businessClassSize = businessClassSize;
             this.economyClassSize = economyClassSize;
+        }
+        public string Accept(Visitor visitor)
+        {
+            return visitor.Visit(this);
         }
     }
 }

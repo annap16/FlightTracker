@@ -43,6 +43,9 @@ namespace OOD_Project
                 {
                     serializationJSON.Serialize(listFTR, FTRNameJson);
                 }
+                delegateClass.objectsList = listFTR;
+                //lists = delegateClass.lists;
+
                 type = true;
 
             }
@@ -53,7 +56,7 @@ namespace OOD_Project
                 networkSource.OnNewDataReady += delegateClass.OnNewDataReadyDelegate;
                 Task instanceCaller = new Task(() => { networkSource.Run(); ifFinished.finished = true; });
                 instanceCaller.Start();
-                WaitForInput(delegateClass, true, ifFinished);
+                WaitForInput(delegateClass, true, ifFinished, null);
                 lists = delegateClass.lists;
                 type = false;
             }
@@ -64,7 +67,7 @@ namespace OOD_Project
 
             return (lists, type);
         }
-        public static void WaitForInput(OnNewDataReadyClass delegateClass, bool delete, IfFinishedTask ifFinished)
+        public static void WaitForInput(OnNewDataReadyClass delegateClass, bool delete, IfFinishedTask ifFinished, NewsGenerator newsGenerator)
         {
             if(delete == true)
             {
@@ -91,6 +94,14 @@ namespace OOD_Project
                     else if (input == "exit")
                     {  
                         return;
+                    }
+                    else if(input=="report")
+                    {
+                        string news;
+                        while((news = newsGenerator.GenerateNextNews())!=null)
+                        {
+                            Console.WriteLine(news);
+                        }
                     }
                     else
                     {

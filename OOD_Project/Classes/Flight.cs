@@ -65,5 +65,7 @@ namespace OOD_Project
             prevLatitude = null;
             prevLongitude = null;
         }
+
+        
     }
 }

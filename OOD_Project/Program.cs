@@ -20,24 +20,36 @@ namespace OOD_Project
             NetworkSourceSimulator.NetworkSourceSimulator networkSource =
                 new NetworkSourceSimulator.NetworkSourceSimulator(filePath, 10, 15);
 
+
             OnNewDataReadyClass delegateClass = new OnNewDataReadyClass();
-           ( AllLists lists, bool type )= ConsoleDataHandling.ChooseDataSource(filePath, FTRNameJson, networkSource, delegateClass);
-           
+           ( AllLists lists, bool type ) = ConsoleDataHandling.ChooseDataSource(filePath, FTRNameJson, networkSource, delegateClass);
+
+            List<Visitor> visitors =
+                new List<Visitor>()
+            {
+                new Television("Telewizja Abelowa"),
+                new Television("Kanal TV-sensor"),
+                new Radio("Radio Kwantyfikator"),
+                new Radio("Radio Shmem"),
+                new Newspapper("Gazeta Kategoryczna"),
+                new Newspapper("Dziennik Politechniczny")
+            };
+            List<IReportable> reportedObj = new List<IReportable>();
+            reportedObj.AddRange(lists.airportList);
+            reportedObj.AddRange(lists.cargoPlaneList);
+            reportedObj.AddRange(lists.passengerPlaneList);
+            NewsGenerator newsGenerator = new NewsGenerator(visitors, reportedObj);
+
             Task runApp = new Task(() => { Runner.Run(); });
             runApp.Start();
             
             Task refreshApp = new Task(() => {
                 Timer timerObject = new Timer(lists);
-                if (!type)
-                {
-                    IfFinishedTask ifFinished = new IfFinishedTask();
-                    ConsoleDataHandling.WaitForInput(delegateClass, false, ifFinished);
-                }
-                else
-                {
-                    Console.WriteLine("Press Enter to exit the app...");
-                    Console.ReadLine();
-                }
+                
+                IfFinishedTask ifFinished2 = new IfFinishedTask();
+
+                ConsoleDataHandling.WaitForInput(delegateClass, true, ifFinished2, newsGenerator);
+
                 timerObject.timer.Stop();
                 timerObject.timer.Dispose();
             });
