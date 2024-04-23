@@ -14,16 +14,23 @@ namespace OOD_Project
     {
         static void Main(string[] args)
         {
+            Logger.NewLog();
+
             string filePath = "./../../../example_data.ftr";
+            string filePathUpdate = "./../../../example.ftre";
             string FTRNameJson = "AllDataFTR.json";
 
             NetworkSourceSimulator.NetworkSourceSimulator networkSource =
                 new NetworkSourceSimulator.NetworkSourceSimulator(filePath, 10, 15);
+            NetworkSourceSimulator.NetworkSourceSimulator networkSourceUpdates =
+                new NetworkSourceSimulator.NetworkSourceSimulator(filePathUpdate, 10, 15);
 
-
+            Publisher publisher = new Publisher();
             OnNewDataReadyClass delegateClass = new OnNewDataReadyClass();
-           ( AllLists lists, bool type ) = ConsoleDataHandling.ChooseDataSource(filePath, FTRNameJson, networkSource, delegateClass);
+            delegateClass.publisher = publisher;
 
+            (AllLists lists, bool type) = ConsoleDataHandling.ChooseDataSource(filePath, FTRNameJson, networkSource, delegateClass, publisher);
+            publisher.flightList = lists.flightList;
             List<Visitor> visitors =
                 new List<Visitor>()
             {
@@ -39,7 +46,7 @@ namespace OOD_Project
             reportedObj.AddRange(lists.cargoPlaneList);
             reportedObj.AddRange(lists.passengerPlaneList);
             NewsGenerator newsGenerator = new NewsGenerator(visitors, reportedObj);
-
+            
             Task runApp = new Task(() => { Runner.Run(); });
             runApp.Start();
             
@@ -54,6 +61,14 @@ namespace OOD_Project
                 timerObject.timer.Dispose();
             });
             refreshApp.Start();
+            //Thread.Sleep(5000);
+
+            IfFinishedTask ifFinishedUpdate = new IfFinishedTask();
+            networkSourceUpdates.OnIDUpdate += publisher.NotifyIDChanged;
+            networkSourceUpdates.OnPositionUpdate += publisher.NotifyPositionChanged;
+            networkSourceUpdates.OnContactInfoUpdate += publisher.NotifyContactInfoChanged;
+            Task instanceCallerUpdates = new Task(() => { networkSourceUpdates.Run(); ifFinishedUpdate.finished = true; });
+            instanceCallerUpdates.Start();
 
             refreshApp.Wait();
         }

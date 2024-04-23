@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetworkSourceSimulator;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,20 @@ namespace OOD_Project
             this.miles = miles;
         }
 
-        
+        public virtual void Update(IDUpdateArgs args, List<Flight> flightList)
+        {
+            ID = args.NewObjectID;
+            foreach (var flight in flightList)
+            {
+                for (int i = 0; i < flight.loadID.Length; i++)
+                {
+                    if (flight.loadID[i] == args.ObjectID)
+                    {
+                        flight.loadID[i] = ID;
+                    }
+                }
+            }
+        }
+
     }
 }

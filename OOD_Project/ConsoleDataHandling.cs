@@ -24,27 +24,27 @@ namespace OOD_Project
         }
         
         public static (AllLists, bool) ChooseDataSource(string filePath, string FTRNameJson, 
-            NetworkSourceSimulator.NetworkSourceSimulator networkSource, OnNewDataReadyClass delegateClass)
+            NetworkSourceSimulator.NetworkSourceSimulator networkSource, OnNewDataReadyClass delegateClass,
+            Publisher publisher)
         {
             AllLists lists = new AllLists();
 
             Console.WriteLine("Choose data source: FTR or TCP");
             string? input = Console.ReadLine();
-
+            
             bool type;
             
             if (input == "FTR")
             {
 
                 FileReaderFTR fileReaderFTR = new FileReaderFTR();
-                List<DataType>? listFTR = fileReaderFTR.ReadFile(filePath, lists);
+                List<DataType>? listFTR = fileReaderFTR.ReadFile(filePath, lists, publisher);
                 SerializationJSON serializationJSON = new SerializationJSON();
                 if (serializationJSON != null)
                 {
                     serializationJSON.Serialize(listFTR, FTRNameJson);
                 }
                 delegateClass.objectsList = listFTR;
-                //lists = delegateClass.lists;
 
                 type = true;
 

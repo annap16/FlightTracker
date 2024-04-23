@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetworkSourceSimulator;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,7 +33,17 @@ namespace OOD_Project
 
         [JsonIgnore]
         public double? prevLatitude { get; set; }
-         public double? prevLongitude { get; set; }
+        [JsonIgnore]
+        public double? prevLongitude { get; set; }
+        [JsonIgnore]
+        public double? startLatitude { get; set; }
+        [JsonIgnore]
+        public double? startLongitude { get; set; }
+        [JsonIgnore]
+        public DateTime? startTime { get; set; }
+
+
+
 
         public Flight(string type, UInt64 iD, UInt64 originID, UInt64 targetID, string takeOffTime, string landingTime, Single longitude, Single latitude, Single aMSL, UInt64 planeID, UInt64[] crewID, UInt64[] loadID) : base(iD, type)
         {
@@ -48,6 +59,10 @@ namespace OOD_Project
             this.loadID = loadID[..];
             prevLatitude = null;
             prevLongitude = null;
+            startLatitude = null;
+            startLongitude = null;
+            startTime = null;
+            
         }
 
         public Flight(string type, UInt64 iD, UInt64 originID, UInt64 targetID, string takeOffTime, string landingTime, UInt64 planeID, UInt64[] crewID, UInt64[] loadID) : base(iD, type)
@@ -65,7 +80,17 @@ namespace OOD_Project
             prevLatitude = null;
             prevLongitude = null;
         }
+        public override void Update(PositionUpdateArgs args, List<Flight>flightList=null)
+        {
+            longitude = args.Longitude;
+            latitude = args.Latitude;
+            AMSL = args.AMSL;
+            prevLatitude = args.Latitude;
+            prevLongitude = args.Longitude;
+            startLatitude = args.Latitude;
+            startLongitude = args.Longitude;
+            startTime = DateTime.Now;
+        }
 
-        
     }
 }

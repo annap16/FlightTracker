@@ -13,6 +13,7 @@ namespace OOD_Project
         public List<DataType> objectsList;
         public AllLists lists;
         public Mutex mut;
+        public Publisher publisher;
         public OnNewDataReadyClass() 
         {
             objectsList = new List<DataType>();
@@ -30,7 +31,7 @@ namespace OOD_Project
             NetworkSourceSimulator.Message message = mySender.GetMessageAt(index);
             byte [] tabBinaryMess = message.MessageBytes;
             FileReaderBinary fileReaderBinary = new FileReaderBinary();
-            objectsList.Add(fileReaderBinary.ReadData(tabBinaryMess, lists));       
+            objectsList.Add(fileReaderBinary.ReadData(tabBinaryMess, lists, publisher));       
         }
     }
 }

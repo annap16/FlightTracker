@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetworkSourceSimulator;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,11 @@ namespace OOD_Project
             this.age = age;
             this.phone = phone;
             this.email = email;
+        }
+        public override void Update(ContactInfoUpdateArgs args)
+        {
+            phone = args.PhoneNumber;
+            email = args.EmailAddress;
         }
        
     }

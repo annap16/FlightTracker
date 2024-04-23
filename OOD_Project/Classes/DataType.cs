@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetworkSourceSimulator;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,20 @@ namespace OOD_Project
             this.ID = ID;
             this.type = type;
         }
-      
+        public virtual void Update(IDUpdateArgs args, List<Flight>flightList)
+        {
+            ID = args.NewObjectID;
+        }
+        public virtual void Update(PositionUpdateArgs args, List<Flight> flightList = null)
+        {
+            Logger.NewLog("Update not possible for this type of object");
+        }
+
+        public virtual void Update(ContactInfoUpdateArgs args)
+        {
+            Logger.NewLog("Update not possible for this type of object");
+        }
+
 
     }
 }

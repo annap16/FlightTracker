@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetworkSourceSimulator;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,6 +31,21 @@ namespace OOD_Project
             this.longitude = longitude;
             AMSL = aMSL;
             this.country = country;
+        }
+        public override void Update(IDUpdateArgs args, List<Flight> flightList)
+        {
+            ID = args.NewObjectID;
+            foreach(var flight in flightList)
+            {
+                if(flight.originID==args.ObjectID)
+                {
+                    flight.originID = ID;
+                }
+                if(flight.targetID == args.ObjectID)
+                {
+                    flight.targetID = ID;
+                }
+            }
         }
 
         public string Accept(Visitor visitor)

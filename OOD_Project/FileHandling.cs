@@ -9,8 +9,8 @@ namespace OOD_Project
     public abstract class FileReader
     {
         
-        public abstract List<DataType>? ReadFile(string filePath, AllLists lists);
-        public abstract DataType ReadData(byte[] data, AllLists lists);
+        public abstract List<DataType>? ReadFile(string filePath, AllLists lists, Publisher publisher);
+        public abstract DataType ReadData(byte[] data, AllLists lists, Publisher publisher);
 
     }
     
@@ -32,7 +32,7 @@ namespace OOD_Project
                 { "FL", AllLists.AddFlight}
             };
         }
-        public override List<DataType>? ReadFile(string filePath, AllLists lists)
+        public override List<DataType>? ReadFile(string filePath, AllLists lists, Publisher publisher)
         {
             List<DataType> objectsList = new List<DataType>();
             try
@@ -46,6 +46,7 @@ namespace OOD_Project
                     if(obj != null)
                     {
                         objectsList.Add(obj);
+                        publisher.Subscribe(obj);
                     }
                 }
                 sr.Close();
@@ -65,7 +66,7 @@ namespace OOD_Project
             return dictionary[splitLine[0]](splitLine, lists);
         }
 
-        public override DataType ReadData(byte[] data, AllLists lists)
+        public override DataType ReadData(byte[] data, AllLists lists, Publisher publisher)
         {
             throw new NotImplementedException();
         }
@@ -91,15 +92,17 @@ namespace OOD_Project
             };
         }
 
-        public override List<DataType>? ReadFile(string filePath, AllLists lists)
+        public override List<DataType>? ReadFile(string filePath, AllLists lists, Publisher publisher)
         {
             throw new NotImplementedException();
         }
 
-        public override DataType ReadData(byte[] data, AllLists lists)
+        public override DataType ReadData(byte[] data, AllLists lists, Publisher publisher)
         {
             string type = GetType(data);
-            return dictionary[type](data, lists);
+            DataType obj = dictionary[type](data, lists);
+            publisher.Subscribe(obj);
+            return obj;
         }
 
         public string GetType(byte[] data)

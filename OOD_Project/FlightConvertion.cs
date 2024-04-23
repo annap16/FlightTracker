@@ -2,6 +2,7 @@
 using Mapsui.Projections;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,13 +18,23 @@ namespace OOD_Project
             flightGUIList = new List<FlightGUI>();
             foreach(Flight flight in flightList)
             {
-               
                 Airport? originAirport = airportList.Find(airport => airport.ID == flight.originID);
                 Airport? targetAirport = airportList.Find(airport => airport.ID == flight.targetID);
-                
-                double timeDiffOrigin = (DateTime.Now - DateTime.ParseExact(flight.takeOffTime, "HH:mm", null)).TotalMilliseconds;
+                double timeDiffOrigin;
+                double timeDiffFlight;
+                if (flight.startTime==null)
+                {
+                    timeDiffOrigin = (DateTime.Now - DateTime.ParseExact(flight.takeOffTime, "HH:mm", null)).TotalMilliseconds;
+                    timeDiffFlight = (DateTime.ParseExact(flight.landingTime, "HH:mm", null) - DateTime.ParseExact(flight.takeOffTime, "HH:mm", null)).TotalMilliseconds;
+                }
+                else
+                {
+                    timeDiffOrigin = timeDiffOrigin = DateTime.Now.Subtract(flight.startTime.Value).TotalMilliseconds;
+                    DateTime landingDateTime = DateTime.ParseExact(flight.landingTime, "HH:mm", null);
+                    timeDiffFlight = landingDateTime.Subtract(flight.startTime.Value).TotalMilliseconds;
+
+                }
                 double timeDiffTarget = (DateTime.ParseExact(flight.landingTime, "HH:mm", null) - DateTime.Now).TotalMilliseconds;
-                double timeDiffFlight = (DateTime.ParseExact(flight.landingTime, "HH:mm", null) - DateTime.ParseExact(flight.takeOffTime, "HH:mm", null)).TotalMilliseconds;
                 
                 if (originAirport==null || targetAirport==null)
                 {
@@ -45,8 +56,18 @@ namespace OOD_Project
                         flight.prevLongitude = originAirport.longitude;
                         flight.prevLatitude = originAirport.latitude;
                     }
-
-                    (double latitude, double longitude)pos = CalculateWorldPosition(originAirport, targetAirport, timeDiffFlight, timeDiffOrigin);
+                    double startLatitude, startLongitude;
+                    if(flight.startLatitude==null || flight.startLongitude==null)
+                    {
+                        startLatitude = originAirport.latitude;
+                        startLongitude = originAirport.longitude;
+                    }
+                    else
+                    {
+                        startLatitude = flight.startLatitude.Value;
+                        startLongitude = flight.startLongitude.Value;
+                    }
+                    (double latitude, double longitude) pos = CalculateWorldPosition(startLatitude, startLongitude, targetAirport, timeDiffFlight, timeDiffOrigin);
                     double roatation = CalculateRotation(flight, (flight.prevLatitude.Value, flight.prevLongitude.Value),(pos.latitude, pos.longitude));
                     
                     FlightGUI pom = new FlightGUI()
@@ -67,12 +88,12 @@ namespace OOD_Project
 
 
         // Using methods described on: https://www.movable-type.co.uk/scripts/latlong.html
-        public (double latitude, double longitude) CalculateWorldPosition(Airport originAirport, Airport targetAirport, double timeDiffAirport, double timeDiffNow)
+        public (double latitude, double longitude) CalculateWorldPosition(double lat, double lon, Airport targetAirport, double timeDiffAirport, double timeDiffNow)
         {
             double fraction = timeDiffNow / timeDiffAirport;
 
-            double lat1 = originAirport.latitude * Math.PI / 180.0;
-            double lon1 = originAirport.longitude * Math.PI / 180.0;
+            double lat1 = lat * Math.PI / 180.0;
+            double lon1 = lon * Math.PI / 180.0;
             double lat2 = targetAirport.latitude * Math.PI / 180.0;
             double lon2 = targetAirport.longitude * Math.PI / 180.0;
 
