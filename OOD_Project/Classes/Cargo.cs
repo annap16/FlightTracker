@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OOD_Project
 {
-    public class Cargo : DataType
+    public class Cargo : DataType, IGetFields
     {
         [JsonInclude]
         public Single weight { get; set; }
@@ -24,6 +24,11 @@ namespace OOD_Project
             this.description = description;
         }
 
+        public Cargo():base()
+        {
+
+        }
+
         public virtual void Update(IDUpdateArgs args, List<Flight> flightList)
         {
             ID = args.NewObjectID;
@@ -37,6 +42,18 @@ namespace OOD_Project
                     }
                 }
             }
+        }
+
+        public static new string[] GetFields()
+        {
+            string[] ret = ["ID", "type", "weight", "code", "description"];
+            return ret;
+        }
+
+        public new string[] GetValues()
+        {
+            string[] ret = [ID.ToString(), type, weight.ToString(), code, description];
+            return ret;
         }
 
     }

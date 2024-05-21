@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OOD_Project
 {
-    public abstract class Person : DataType
+    public abstract class Person : DataType, IGetFields
     {
         [JsonInclude]
         public string name { get; set; }
@@ -26,10 +26,27 @@ namespace OOD_Project
             this.phone = phone;
             this.email = email;
         }
+
+        public Person():base()
+        {
+
+        }
         public override void Update(ContactInfoUpdateArgs args)
         {
             phone = args.PhoneNumber;
             email = args.EmailAddress;
+        }
+
+        public static new string[] GetFields()
+        {
+            string[] ret = ["ID", "type", "name", "age", "phone", "email"];
+            return ret;
+        }
+
+        public new string[] GetValues()
+        {
+            string[] ret = [ID.ToString(), type, name, age.ToString(), phone, email];
+            return ret;
         }
        
     }

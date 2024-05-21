@@ -8,7 +8,13 @@ using System.Threading.Tasks;
 
 namespace OOD_Project
 {
-    public abstract class DataType
+    public interface IGetFields
+    {
+        public static abstract string[] GetFields();
+        public abstract string[] GetValues();
+
+    }
+    public abstract class DataType: IGetFields
     {
         [JsonInclude]
         public UInt64 ID { get; set; }
@@ -19,6 +25,11 @@ namespace OOD_Project
         {
             this.ID = ID;
             this.type = type;
+        }
+
+        public DataType()
+        {
+
         }
         public virtual void Update(IDUpdateArgs args, List<Flight>flightList)
         {
@@ -33,6 +44,19 @@ namespace OOD_Project
         {
             Logger.NewLog("Update not possible for this type of object");
         }
+
+        public static string[] GetFields()
+        {
+            string[] ret = ["ID", "type"];
+            return ret;
+        }
+
+        public string[] GetValues()
+        {
+            string[] ret = [ID.ToString(), type];
+            return ret;
+        }
+
 
 
     }

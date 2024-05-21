@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OOD_Project
 {
-    public class Passenger : Person
+    public class Passenger : Person, IGetFields
     {
         [JsonInclude]
         public string classFlight { get; set; }
@@ -19,6 +19,11 @@ namespace OOD_Project
         {
             this.classFlight = classFlight;
             this.miles = miles;
+        }
+
+        public Passenger():base()
+        {
+
         }
 
         public virtual void Update(IDUpdateArgs args, List<Flight> flightList)
@@ -36,5 +41,16 @@ namespace OOD_Project
             }
         }
 
+        public static new string[] GetFields()
+        {
+            string[] ret = ["ID", "type", "name", "age", "phone", "email", "classFlight", "miles"];
+            return ret;
+        }
+
+        public new string[] GetValues()
+        {
+            string[] ret = [ID.ToString(), type, name, age.ToString(), phone, email, classFlight, miles.ToString()];
+            return ret;
+        }
     }
 }

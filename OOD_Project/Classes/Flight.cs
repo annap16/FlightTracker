@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OOD_Project
 {
-    public class Flight : DataType
+    public class Flight : DataType, IGetFields
     {
         [JsonInclude]
         public UInt64 originID { get; set; }
@@ -41,6 +41,12 @@ namespace OOD_Project
         public double? startLongitude { get; set; }
         [JsonIgnore]
         public DateTime? startTime { get; set; }
+        [JsonIgnore]
+        public Airport? originAirport { get; set; }
+        [JsonIgnore]
+        public Airport? targetAirport { get; set; }
+        [JsonIgnore]
+        public Plane? plane { get; set; }
 
 
 
@@ -80,6 +86,11 @@ namespace OOD_Project
             prevLatitude = null;
             prevLongitude = null;
         }
+
+        public Flight():base()
+        {
+
+        }
         public override void Update(PositionUpdateArgs args, List<Flight>flightList=null)
         {
             longitude = args.Longitude;
@@ -92,5 +103,60 @@ namespace OOD_Project
             startTime = DateTime.Now;
         }
 
+        public static new string[] GetFields()
+        {
+            string[] ret = ["ID", "type", "originID", "targetID", "takeOffTime", "landingTime", "longitude", "latitude", "AMSL", "planeID", "crewID", "loadID", "plane.ID",
+                "plane.firstClassSize", "plane.businessClassSize", "plane.economyClassSize", "plane.maxLoad", "plane.type", "plane.serial", "plane.country", "plane.model",
+            "originAirport.ID", "originAirport.longitude", "originAirport.latitude", "originAirport.AMSL", "originAirport.type", "originAirport.name", "originAirport.code",
+            "originAirport.country", "targetAirport.ID", "targetAirport.longitude", "targetAirport.latitude", "targetAirport.AMSL", "targetAirport.type", "targetAirport.name",
+            "targetAirport.code", "targetAirport.country"];
+            return ret;
+        }
+
+        public new string[] GetValues()
+        {
+            List<string> ret = [ID.ToString(), type, originID.ToString(), targetID.ToString(), takeOffTime, landingTime, longitude.ToString(), latitude.ToString(), AMSL.ToString(), planeID.ToString()];
+            string crew = "[";
+            for(int i=0; i<crewID.Length;i++)
+            {
+                crew = crew + crewID[i].ToString() + ";";
+            }
+            crew += "]";
+            ret.Add(crew);
+            string load = "[";
+            for(int i=0; i<loadID.Length;i++)
+            {
+                load = load + loadID[i].ToString() + ";";
+            }
+            load+= "]";
+            ret.Add(load);
+            ret.Add(plane.ID.ToString());
+            ret.Add((plane as PassengerPlane)?.firstClassSize.ToString() ?? string.Empty);
+            ret.Add((plane as PassengerPlane)?.businessClassSize.ToString() ?? string.Empty);
+            ret.Add((plane as PassengerPlane)?.economyClassSize.ToString() ?? string.Empty);
+            ret.Add((plane as CargoPlane)?.maxLoad.ToString() ?? string.Empty);
+            ret.Add(plane.type);
+            ret.Add(plane.serial);
+            ret.Add(plane.country);
+            ret.Add(plane.model);
+            ret.Add(originAirport.ID.ToString());
+            ret.Add(originAirport.longitude.ToString());
+            ret.Add(originAirport.latitude.ToString());
+            ret.Add(originAirport.AMSL.ToString());
+            ret.Add(originAirport.type);
+            ret.Add(originAirport.name);
+            ret.Add(originAirport.code);
+            ret.Add(originAirport.country);
+            ret.Add(targetAirport.ID.ToString());
+            ret.Add(targetAirport.longitude.ToString());
+            ret.Add(targetAirport.latitude.ToString());
+            ret.Add(targetAirport.AMSL.ToString());
+            ret.Add(targetAirport.type);
+            ret.Add(targetAirport.name);
+            ret.Add(targetAirport.code);
+            ret.Add(targetAirport.country);
+
+            return ret.ToArray();
+        }
     }
 }

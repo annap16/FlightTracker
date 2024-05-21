@@ -56,7 +56,7 @@ namespace OOD_Project
                 networkSource.OnNewDataReady += delegateClass.OnNewDataReadyDelegate;
                 Task instanceCaller = new Task(() => { networkSource.Run(); ifFinished.finished = true; });
                 instanceCaller.Start();
-                WaitForInput(delegateClass, true, ifFinished, null);
+                WaitForInput(delegateClass, true, ifFinished, null, null);
                 lists = delegateClass.lists;
                 type = false;
             }
@@ -67,7 +67,7 @@ namespace OOD_Project
 
             return (lists, type);
         }
-        public static void WaitForInput(OnNewDataReadyClass delegateClass, bool delete, IfFinishedTask ifFinished, NewsGenerator newsGenerator)
+        public static void WaitForInput(OnNewDataReadyClass delegateClass, bool delete, IfFinishedTask ifFinished, NewsGenerator newsGenerator, AllLists lists)
         {
             if(delete == true)
             {
@@ -104,9 +104,16 @@ namespace OOD_Project
                         }
                     }
                     else
-                    {
-                        Console.WriteLine("Wrong input!!! Write 'print' to download data " +
-                            "or 'exit' to terminate the app");
+                    { 
+                        Chain chainDisplay = new ChainDisplay();
+                        Chain chainUpdate = new ChainUpadate();
+                        Chain chainDelete = new ChainDelete();
+                        Chain chainAdd = new ChainAdd();
+                        chainDisplay.SetNextChain(chainUpdate);
+                        chainUpdate.SetNextChain(chainDelete);
+                        chainDelete.SetNextChain(chainAdd);
+
+                        chainDisplay.ParseAndTransfer(input, lists);
                     }
                 }
             }

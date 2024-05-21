@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OOD_Project
 {
-    public class Airport : DataType, IReportable
+    public class Airport : DataType, IReportable, IGetFields
     {
         [JsonInclude]
         public string name { get; set; }
@@ -32,6 +32,10 @@ namespace OOD_Project
             AMSL = aMSL;
             this.country = country;
         }
+        public Airport():base()
+        {
+
+        }
         public override void Update(IDUpdateArgs args, List<Flight> flightList)
         {
             ID = args.NewObjectID;
@@ -51,6 +55,17 @@ namespace OOD_Project
         public string Accept(Visitor visitor)
         {
             return visitor.Visit(this);
+        }
+
+        public static new string[]GetFields()
+        {
+            string[] ret = ["ID", "type", "name", "code", "latitude", "longitude", "AMSL", "country"];
+            return ret;
+        }
+        public new string[] GetValues()
+        {
+            string[] ret = [ID.ToString(), type.ToString(), name, code, latitude.ToString(), longitude.ToString(), AMSL.ToString(), country];
+            return ret;
         }
     }
 }

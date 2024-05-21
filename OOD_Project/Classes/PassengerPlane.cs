@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OOD_Project
 {
-    public class PassengerPlane : Plane, IReportable
+    public class PassengerPlane : Plane, IReportable, IGetFields
     {
         [JsonInclude]
         public UInt16 firstClassSize { get; set; }
@@ -22,9 +22,27 @@ namespace OOD_Project
             this.businessClassSize = businessClassSize;
             this.economyClassSize = economyClassSize;
         }
+
+        public PassengerPlane():base()
+        {
+
+        }
         public string Accept(Visitor visitor)
         {
             return visitor.Visit(this);
         }
+
+        public static new string[] GetFields()
+        {
+            string[] ret = ["ID", "type", "serial", "country", "model", "firstClassSize", "businessClassSize", "economyClassSize"];
+            return ret;
+        }
+
+        public new string[] GetValues()
+        {
+            string[] ret = [ID.ToString(), type, serial, country, model, firstClassSize.ToString(), businessClassSize.ToString(), economyClassSize.ToString()];
+            return ret;
+        }
+
     }
 }

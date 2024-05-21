@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OOD_Project
 {
-    public abstract class Plane : DataType
+    public abstract class Plane : DataType, IGetFields
     {
         [JsonInclude]
         public string serial { get; set; }
@@ -22,6 +22,11 @@ namespace OOD_Project
             this.serial = serial;
             this.country = country;
             this.model = model;
+        }
+
+        public Plane():base()
+        {
+
         }
 
         public virtual void Update(IDUpdateArgs args, List<Flight> flightList)
@@ -60,6 +65,17 @@ namespace OOD_Project
             }
         }
 
+        public static new string[] GetFields()
+        {
+            string[] ret = ["ID", "type", "serial", "country", "model"];
+            return ret;
+        }
+
+        public new string[] GetValues()
+        {
+            string[] ret = [ID.ToString(), type, serial, country, model];
+            return ret;
+        }
 
     }
 }

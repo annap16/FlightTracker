@@ -23,7 +23,7 @@ namespace OOD_Project
             NetworkSourceSimulator.NetworkSourceSimulator networkSource =
                 new NetworkSourceSimulator.NetworkSourceSimulator(filePath, 10, 15);
             NetworkSourceSimulator.NetworkSourceSimulator networkSourceUpdates =
-                new NetworkSourceSimulator.NetworkSourceSimulator(filePathUpdate, 10, 15);
+                new NetworkSourceSimulator.NetworkSourceSimulator(filePathUpdate, 100, 500);
 
             Publisher publisher = new Publisher();
             OnNewDataReadyClass delegateClass = new OnNewDataReadyClass();
@@ -31,6 +31,7 @@ namespace OOD_Project
 
             (AllLists lists, bool type) = ConsoleDataHandling.ChooseDataSource(filePath, FTRNameJson, networkSource, delegateClass, publisher);
             publisher.flightList = lists.flightList;
+            AncillaryFunctions.SetStructures(lists.flightList, lists);
             List<Visitor> visitors =
                 new List<Visitor>()
             {
@@ -55,13 +56,12 @@ namespace OOD_Project
                 
                 IfFinishedTask ifFinished2 = new IfFinishedTask();
 
-                ConsoleDataHandling.WaitForInput(delegateClass, true, ifFinished2, newsGenerator);
+                ConsoleDataHandling.WaitForInput(delegateClass, true, ifFinished2, newsGenerator, lists);
 
                 timerObject.timer.Stop();
                 timerObject.timer.Dispose();
             });
             refreshApp.Start();
-            //Thread.Sleep(5000);
 
             IfFinishedTask ifFinishedUpdate = new IfFinishedTask();
             networkSourceUpdates.OnIDUpdate += publisher.NotifyIDChanged;

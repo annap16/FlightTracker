@@ -16,6 +16,8 @@ namespace OOD_Project
         public FlightConvertion(List<Flight> flightList, List<Airport>airportList)
         {
             flightGUIList = new List<FlightGUI>();
+            Mutex mutex = new Mutex();
+            mutex.WaitOne();
             foreach(Flight flight in flightList)
             {
                 Airport? originAirport = airportList.Find(airport => airport.ID == flight.originID);
@@ -84,7 +86,9 @@ namespace OOD_Project
                 }
 
             }
-         }
+            mutex.ReleaseMutex();
+
+        }
 
 
         // Using methods described on: https://www.movable-type.co.uk/scripts/latlong.html
