@@ -1,4 +1,4 @@
-FlightTracker to aplikacja, której główną funkcjonalnością jest symulowanie ruchu i wizualizacja samolotów, przy pomocy wcześniej przygotowanych danych. Ruch samolotów jest symulowany na interaktywnej mapie. Wyświetlana mapa może zostać przybliżona za pomocą scrolla na myszy. Ruch jest na tyle niewielki, że zaleca się przybliżenie mapy w celu zaobserwowania ruchu samolotu. 
+FlightTracker to aplikacja, której główną funkcjonalnością jest symulowanie ruchu i wizualizacja samolotów, przy pomocy wcześniej przygotowanych danych. Ruch samolotów jest symulowany na interaktywnej mapie. Wyświetlana mapa może zostać przybliżona za pomocą scrolla na myszy. Ruch jest na tyle niewielki, że zaleca się przybliżenie mapy w celu zaobserwowania ruchu samolotu. \n
 Aplikacja wyznacza najkrótszą trasę dla danego lotu, korzystając z metody okręgu wielkiego, która pozwala znaleźć minimalny łuk na sferze. Bieżące położenie jest aproksymowane na podstawie współrzędnych lotniska początkowego i docelowego, czasów startu i lądowania, a także aktualnego czasu.
 
 
